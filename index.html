@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Navbar</title>
+    <style>
+      :root {
+        --primary-color: #3a86ff;
+        --text-color: #333;
+        --bg-color: #fff;
+        --nav-bg: rgba(255, 255, 255, 0.9);
+        --border-color: #eee;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      .dark {
+        --primary-color: #4cc9f0;
+        --text-color: #f8f9fa;
+        --bg-color: #121212;
+        --nav-bg: rgba(18, 18, 18, 0.9);
+        --border-color: #333;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        transition: var(--transition);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Navbar Styles */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--nav-bg);
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        transition: var(--transition);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        padding: 0.8rem 0; /* Changed from 1rem to reduce height */
+        position: relative;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--primary-color);
+        transition: var(--transition);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      /* Theme Toggle Button */
+      .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: var(--transition);
+        position: relative;
+      }
+
+      .theme-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .theme-toggle:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .theme-toggle i {
+        font-size: 1.2rem;
+        color: var(--text-color);
+        transition: var(--transition);
+        position: absolute;
+      }
+
+      .fa-sun {
+        opacity: 0;
+        transform: rotate(90deg);
+      }
+
+      .fa-moon {
+        opacity: 1;
+        transform: rotate(0);
+      }
+
+      .dark .fa-sun {
+        opacity: 1;
+        transform: rotate(0);
+      }
+
+      .dark .fa-moon {
+        opacity: 0;
+        transform: rotate(-90deg);
+      }
+
+      /* Hamburger Menu */
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--text-color);
+        position: absolute;
+        left: 0;
+        transition: var(--transition);
+      }
+
+      .hamburger span:nth-child(1) {
+        top: 0;
+      }
+
+      .hamburger span:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .hamburger span:nth-child(3) {
+        bottom: 0;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        bottom: 50%;
+        transform: translateY(50%) rotate(-45deg);
+      }
+
+      /* Mobile Menu */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: block;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 60px;
+          /* z-index: -1; */
+          left: 0;
+          right: 0;
+          background-color: var(--nav-bg);
+          backdrop-filter: blur(10px);
+          flex-direction: column;
+          align-items: center;
+          gap: 0;
+          padding: 1rem 0;
+          height: 0;
+          overflow: hidden;
+          transition: height 0.3s ease;
+          box-shadow: var(--shadow);
+        }
+
+        .nav-links.active {
+          height: auto;
+        }
+
+        .nav-links a {
+          width: 100%;
+          text-align: center;
+          padding: 1rem 0;
+          opacity: 0;
+          transform: translateY(-20px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links.active a {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Staggered animation for nav links */
+        .nav-links.active a:nth-child(1) {
+          transition-delay: 0.1s;
+        }
+        .nav-links.active a:nth-child(2) {
+          transition-delay: 0.2s;
+        }
+        .nav-links.active a:nth-child(3) {
+          transition-delay: 0.3s;
+        }
+        .nav-links.active a:nth-child(4) {
+          transition-delay: 0.4s;
+        }
+        .nav-links.active a:nth-child(5) {
+          transition-delay: 0.5s;
+        }
+      }
+
+      /* Main Content */
+      main {
+        margin-top: 80px;
+        padding: 2rem 0;
+      }
+
+      section {
+        padding: 4rem 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 6rem 0;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background-color: var(--nav-bg);
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+      /* Updated Navbar Styles for Mobile */
+      @media (max-width: 768px) {
+        .nav-container {
+          padding:1rem; /* Reduced padding */
+        }
+
+        .logo {
+          order: 1; /* Left side */
+          flex: 1;
+        }
+
+        .theme-toggle {
+          order: 2; /* Center */
+          position: absolute;
+          left: 80%;
+          transform: translateX(-50%);
+        }
+
+        .hamburger {
+          order: 3; /* Right side */
+          margin-left: auto;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-container">
+        <a href="#" class="logo">ModernNav</a>
+
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="nav-links">
+          <a href="#">Home</a>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </div>
+
+        <button class="theme-toggle">
+          <i class="fas fa-sun"></i>
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </nav>
+
+    <main class="container">
+      <section class="hero">
+        <h1>Welcome to Modern Design</h1>
+        <p>
+          Experience the sleek and responsive navigation with dark/light mode
+          toggle
+        </p>
+      </section>
+
+      <section>
+        <h2>Our Features</h2>
+        <div class="features">
+          <div class="feature-card">
+            <h3>Responsive Design</h3>
+            <p>
+              Our navbar adapts perfectly to all screen sizes, from mobile to
+              desktop.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Dark Mode</h3>
+            <p>
+              Elegant dark theme with smooth transitions to reduce eye strain.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Smooth Animations</h3>
+            <p>
+              Enjoy delightful animations for menu toggles and theme switching.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>About Us</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui
+          mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor
+          neque eu tellus rhoncus ut eleifend nibh porttitor.
+        </p>
+        <p>
+          Ut in nulla enim. Phasellus molestie magna non est bibendum non
+          venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.
+        </p>
+      </section>
+
+      <section>
+        <h2>Testimonials</h2>
+        <div class="features">
+          <div class="feature-card">
+            <p>"This is the best navbar implementation I've ever seen!"</p>
+            <p>- Happy Customer</p>
+          </div>
+          <div class="feature-card">
+            <p>"The animations are so smooth and the design is very modern."</p>
+            <p>- Satisfied User</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Hamburger menu toggle
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", function () {
+          this.classList.toggle("active");
+          navLinks.classList.toggle("active");
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll(".nav-links a").forEach((link) => {
+          link.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navLinks.classList.remove("active");
+          });
+        });
+
+        // Theme toggle
+        const themeToggle = document.querySelector(".theme-toggle");
+        const html = document.documentElement;
+
+        themeToggle.addEventListener("click", function () {
+          html.classList.toggle("dark");
+
+          // Save preference to localStorage
+          const isDark = html.classList.contains("dark");
+          localStorage.setItem("darkMode", isDark);
+        });
+
+        // Check for saved theme preference
+        if (localStorage.getItem("darkMode") === "true") {
+          html.classList.add("dark");
+        } else if (
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ) {
+          html.classList.add("dark");
+        }
+
+        // Watch for system theme changes
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (localStorage.getItem("darkMode") === null) {
+              html.classList.toggle("dark", e.matches);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
